@@ -26,7 +26,6 @@ def main(ctx):
 
         while not valid:
             tm.list_tmux_sessions(sessions)
-            pprint(err)
             if err>0:
                 click.echo("Invalid Selection")
             if err>5:
@@ -85,7 +84,6 @@ def kill():
         if err>5:
             click.echo("Too many errors")
             return
-        pprint(err)
         ask = click.prompt("Select session to kill",type=int)
         if ask>0 and ask<=len(sessions):
             valid = True
