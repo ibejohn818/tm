@@ -35,11 +35,21 @@ def cmd(inp):
     out = ''.join(com.communicate())
     return out, com.returncode
 
-def list_tmux_sessions(sessions):
+def list_tmux_sessions(sessions, **kwargs):
+
+    defaults = {
+            'show_add': False
+            }
+
+    defaults.update(kwargs)
+
+    if defaults['show_add']:
+        click.echo("0) Create new session")
 
     for k,v in enumerate(sessions):
         k = k+1
         click.echo('{0}) {1}'.format(k,v))
+
 
     return sessions
 

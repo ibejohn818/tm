@@ -116,9 +116,26 @@ def test_cli_main(monkeypatch):
     assert 'tmux attach -t test1' in res.output
     assert 'Select a session to resume' in res.output
 
-    # runner = CliRunner()
-    # res = runner.invoke(cli.main,input='8')
-    # assert 'Invalid Selection' in res.output
+    runner = CliRunner()
+    res = runner.invoke(cli.main,input='8\n8\n8\n8\n8\n8\n')
+    assert 'Invalid Selection' in res.output
+    assert 'Too many errors' in res.output
+
+    def tmux_session_mock():
+        return []
+
+    monkeypatch.setattr(tm,'tmux_sessions',tmux_session_mock)
+
+    runner = CliRunner()
+    res = runner.invoke(cli.main,input='1')
+
+    assert 'Name new session:' in res.output
+
+    runner = CliRunner()
+    res = runner.invoke(cli.main,input='0')
+
+    assert 'Name new session:' in res.output
+
 
 def test_cli_add(monkeypatch):
 

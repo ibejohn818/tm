@@ -21,17 +21,27 @@ def main(ctx):
 
         sessions = tm.tmux_sessions()
 
+        if len(sessions)<=0:
+            return add()
+
         valid = False
         err = 0
 
         while not valid:
-            tm.list_tmux_sessions(sessions)
+
+            tm.list_tmux_sessions(sessions,show_add=True)
+
             if err>0:
                 click.echo("Invalid Selection")
+
             if err>5:
                 click.echo("Too many errors")
                 return
+
             ask = click.prompt("Select a session to resume",type=int)
+
+            if ask == 0:
+                return add()
 
             if ask>0 and ask<=len(sessions):
                 valid = True
@@ -52,6 +62,7 @@ def main(ctx):
 
 @main.command()
 def add():
+
     valid = False
 
     while not valid:
