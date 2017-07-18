@@ -47,16 +47,14 @@ def main(ctx):
 
 
 @main.command()
-def add():
+@click.pass_context
+def add(ctx):
 
-    valid = False
+    name = click.prompt("Name new session")
 
-    while not valid:
-        name = click.prompt("Name new session")
-        valid = True
-        if re.search(':',name):
-            click.echo("Invalid character. Cannot use ':' in session name")
-            valid = False
+    if re.search(':',name):
+        click.echo("Invalid character. Cannot use ':' in session name")
+        ctx.invoke(add)
 
     sessions = tm.tmux_sessions()
 
