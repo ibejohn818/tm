@@ -14,15 +14,21 @@ Features
 --------
 List sessions ( You can also add a new one )
 
-`tm`
+```
+tm
+```
 
 Add session
 
-`tm add`
+```
+tm add
+```
 
 Kill sessions
 
-`tm kill`
+```
+tm kill
+```
 
 Credits
 ---------
