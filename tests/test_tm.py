@@ -74,7 +74,7 @@ def test_tmux_resume_session():
 
     cmd = tm.resume_session('test1:text')
 
-    assert cmd == 'tmux attach -t test1'
+    assert cmd == "tmux attach -t 'test1'"
 
 def test_cmd(monkeypatch):
 
@@ -99,10 +99,7 @@ def test_cmd(monkeypatch):
 
 def test_cli_main(monkeypatch):
     def tmux_session_mock():
-        return [
-                'test1:text',
-                'test2:text'
-                ]
+        return []
 
     def mock_tm_cmd(s):
         print(s)
@@ -113,29 +110,31 @@ def test_cli_main(monkeypatch):
 
     runner = CliRunner()
     res = runner.invoke(cli.main,input='1')
-    assert 'tmux attach -t test1' in res.output
-    assert 'Select a session to resume' in res.output
+    assert 'Name new session:' in res.output
 
     runner = CliRunner()
-    res = runner.invoke(cli.main,input='8\n8\n8\n8\n8\n8\n')
-    assert 'Invalid Selection' in res.output
-    assert 'Too many errors' in res.output
+    res = runner.invoke(cli.main,input='TestName\n')
+    assert 'Name new session:' in res.output
+    assert "tmux new-session -s 'TestName'" in res.output
 
     def tmux_session_mock():
-        return []
+        return [
+                'test1:text',
+                'test2:text'
+                ]
 
     monkeypatch.setattr(tm,'tmux_sessions',tmux_session_mock)
-
     runner = CliRunner()
     res = runner.invoke(cli.main,input='1')
-
-    assert 'Name new session:' in res.output
+    assert "tmux attach -t 'test1'" in res.output
 
     runner = CliRunner()
-    res = runner.invoke(cli.main,input='0')
+    res = runner.invoke(cli.main,input='6\n1\n')
+    assert "Invalid Selection" in res.output
 
-    assert 'Name new session:' in res.output
-
+    runner = CliRunner()
+    res = runner.invoke(cli.main,input='0\nTestName\n')
+    assert "Name new session:" in res.output
 
 def test_cli_add(monkeypatch):
 

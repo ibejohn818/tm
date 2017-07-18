@@ -17,42 +17,28 @@ import tm
 def main(ctx):
     """This is my custom help message"""
 
+
     if ctx.invoked_subcommand == None:
 
         sessions = tm.tmux_sessions()
 
         if len(sessions)<=0:
-            return add()
+            return ctx.invoke(add)
 
-        valid = False
-        err = 0
+        tm.list_tmux_sessions(sessions,show_add=True)
 
-        while not valid:
+        ask = click.prompt("Select a session to resume",type=int)
 
-            tm.list_tmux_sessions(sessions,show_add=True)
+        if ask == 0:
+            return ctx.invoke(add)
 
-            if err>0:
-                click.echo("Invalid Selection")
-
-            if err>5:
-                click.echo("Too many errors")
-                return
-
-            ask = click.prompt("Select a session to resume",type=int)
-
-            if ask == 0:
-                return add()
-
-            if ask>0 and ask<=len(sessions):
-                valid = True
-            else:
-                err += 1
-
+        if ask<1 or ask>len(sessions):
+            click.echo("Invalid Selection")
+            return ctx.invoke(main)
 
         session = sessions[(ask-1)]
 
         cmd_str = tm.resume_session(session)
-        pprint(cmd_str)
         tm.cmd(cmd_str)
 	# cmd('tmux attach -t {0}'.format(sessions[(ask-1)]))
 
