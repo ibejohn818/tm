@@ -59,8 +59,10 @@ def add(ctx):
     sessions = tm.tmux_sessions()
 
     for s in sessions:
-        if name == s.split(':')[0]:
-            tm.cmd(tm.resume_session(s))
+        if '{0}{1}'.format(name,':') in s:
+            comm = tm.resume_session('{0}{1}'.format(name,':'))
+            tm.cmd(comm)
+
 
     command = "tmux new-session -s '{0}'".format(name)
 
@@ -69,26 +71,17 @@ def add(ctx):
 @main.command()
 def kill():
     sessions = tm.tmux_sessions()
-    valid = False
-    err = 0
-    while not valid:
-        tm.list_tmux_sessions(sessions)
-        if err>0:
-            click.echo("Invalid Selection")
-        if err>5:
-            click.echo("Too many errors")
-            return
-        ask = click.prompt("Select session to kill",type=int)
-        if ask>0 and ask<=len(sessions):
-            valid = True
-        else:
-            err += 1
 
-    session = sessions[(ask-1)]
+    if len(sessions)<=0:
+        click.echo("No active sessions")
+        exit(0)
 
-    command = tm.kill_session(session)
+    ask = click.prompt("Select a session to kill",type=int)
 
-    return tm.cmd(command)
+    if ask>0 and ask<=len(sessions):
+        session = sessions[(ask-1)]
+        command = tm.kill_session(session)
+        return tm.cmd(command)
 
 
 

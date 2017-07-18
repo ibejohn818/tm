@@ -158,11 +158,11 @@ def test_cli_add(monkeypatch):
 
 
     runner = CliRunner()
-    res = runner.invoke(cli.add,input='test:test')
+    res = runner.invoke(cli.add,input='test:test\ntest')
     assert 'Invalid' in res.output
 
     runner = CliRunner()
-    res = runner.invoke(cli.add,input='test1')
+    res = runner.invoke(cli.add,input='test1\ntest1\n')
     assert "tmux attach -t 'test1'" in res.output
 
 def test_cli_kill(monkeypatch):
@@ -181,5 +181,15 @@ def test_cli_kill(monkeypatch):
     runner = CliRunner()
     res = runner.invoke(cli.kill, input='1')
 
-    assert 'Select session to kill:' in res.output
+    assert 'Select a session to kill:' in res.output
     assert 'tmux kill-session -t test1' in res.output
+
+    def mock_tmux_sessions():
+        return []
+
+    monkeypatch.setattr(tm, 'tmux_sessions', mock_tmux_sessions)
+
+    runner = CliRunner()
+    res = runner.invoke(cli.kill)
+    assert 'No active sessions' in res.output
+
