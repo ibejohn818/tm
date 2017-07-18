@@ -69,7 +69,8 @@ def add(ctx):
     return tm.cmd(command)
 
 @main.command()
-def kill():
+@click.pass_context
+def kill(ctx):
     sessions = tm.tmux_sessions()
 
     if len(sessions)<=0:
@@ -77,6 +78,10 @@ def kill():
         exit(0)
 
     ask = click.prompt("Select a session to kill",type=int)
+
+    if ask<=0 or ask>len(sessions):
+        click.echo("Invalid selection")
+        return ctx.invoke(kill)
 
     if ask>0 and ask<=len(sessions):
         session = sessions[(ask-1)]

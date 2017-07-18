@@ -184,6 +184,11 @@ def test_cli_kill(monkeypatch):
     assert 'Select a session to kill:' in res.output
     assert 'tmux kill-session -t test1' in res.output
 
+    runner = CliRunner()
+    res = runner.invoke(cli.kill, input='6\n1\n')
+
+    assert 'Invalid' in res.output
+
     def mock_tmux_sessions():
         return []
 
@@ -192,4 +197,6 @@ def test_cli_kill(monkeypatch):
     runner = CliRunner()
     res = runner.invoke(cli.kill)
     assert 'No active sessions' in res.output
+
+
 
