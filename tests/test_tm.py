@@ -161,9 +161,9 @@ def test_cli_add(monkeypatch):
     res = runner.invoke(cli.add,input='test:test')
     assert 'Invalid' in res.output
 
-    # runner = CliRunner()
-    # res = runner.invoke(cli.add,input='test1\n')
-    # assert "tmux aattach -t 'test1'" in res.output
+    runner = CliRunner()
+    res = runner.invoke(cli.add,input='test1')
+    assert "tmux attach -t 'test1'" in res.output
 
 def test_cli_kill(monkeypatch):
 

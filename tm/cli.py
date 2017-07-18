@@ -61,7 +61,6 @@ def add(ctx):
     for s in sessions:
         if name == s.split(':')[0]:
             tm.cmd(tm.resume_session(s))
-            return
 
     command = "tmux new-session -s '{0}'".format(name)
 
