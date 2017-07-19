@@ -1,11 +1,8 @@
+## Tmux Session Helper
 ===================
-Tmux Session Helper
-===================
 
 
-.. image:: https://img.shields.io/travis/ibejohn818/tm.svg
-        :target: https://travis-ci.org/ibejohn818/tm
-
+[![Build Status](https://travis-ci.org/ibejohn818/tm.svg?branch=master)](https://travis-ci.org/ibejohn818/tm)
 
 Start, Kill & Resume Tmux Sessions
 
