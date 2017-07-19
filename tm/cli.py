@@ -12,7 +12,7 @@ from pprint import pprint
 import tm
 
 
-@click.group(invoke_without_command=True)
+@click.group(invoke_without_command=True,help="Create, Kill & Resume tmux sessions")
 @click.pass_context
 def main(ctx):
     """This is my custom help message"""
