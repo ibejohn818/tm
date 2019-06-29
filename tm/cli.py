@@ -57,7 +57,7 @@ def add(ctx):
             comm = tm.resume_session('{0}{1}'.format(name, ':'))
             tm.cmd(comm)
 
-    command = "tmux new-session -s '{0}'".format(name)
+    command = "tmux -u new-session -s '{0}'".format(name)
 
     return tm.cmd(command)
 

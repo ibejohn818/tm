@@ -11,7 +11,7 @@ import click
 def resume_session(session):
     key = session.split(':')[0]
 
-    cmd = "tmux attach -t '{0}'".format(key)
+    cmd = "tmux -u attach -t '{0}'".format(key)
 
     return cmd
 
